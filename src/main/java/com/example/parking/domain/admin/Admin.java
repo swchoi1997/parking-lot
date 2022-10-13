@@ -1,5 +1,6 @@
 package com.example.parking.domain.admin;
 
+import com.example.parking.domain.building.Building;
 import com.example.parking.domain.common.BaseEntity;
 import com.example.parking.domain.common.Role;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,17 @@ public class Admin extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Building building;
+
+    //==연관관계 편의 메서드==//
+    public void setBuilding(Building building) {
+        if (this.building != null) {
+            this.building.getAdminList().remove(this);
+        }
+        this.building = building;
+        building.getAdminList().add(this);
+    }
 
 }
