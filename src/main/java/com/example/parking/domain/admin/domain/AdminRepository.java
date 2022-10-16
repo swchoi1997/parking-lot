@@ -1,4 +1,4 @@
-package com.example.parking.domain.admin;
+package com.example.parking.domain.admin.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

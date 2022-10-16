@@ -1,4 +1,4 @@
-package com.example.parking.domain.admin;
+package com.example.parking.domain.admin.domain;
 
 import com.example.parking.domain.building.Building;
 import com.example.parking.domain.common.BaseEntity;

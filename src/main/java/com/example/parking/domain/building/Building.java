@@ -1,6 +1,6 @@
 package com.example.parking.domain.building;
 
-import com.example.parking.domain.admin.Admin;
+import com.example.parking.domain.admin.domain.Admin;
 import com.example.parking.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
