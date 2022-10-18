@@ -1,6 +1,8 @@
-package com.example.parking.domain.building;
+package com.example.parking.domain.building.entity;
 
-import com.example.parking.domain.admin.domain.Admin;
+
+import com.example.parking.domain.admin.entity.Admin;
+import com.example.parking.domain.building.dto.UpdateBuildingInfoRequestDto;
 import com.example.parking.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +14,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
@@ -29,11 +33,19 @@ public class Building {
     @Column(nullable = false, name = "building_name")
     private String name;
 
+    @Column(nullable = false)
+    private String address;
+
+    public void updateInfo(UpdateBuildingInfoRequestDto dto) {
+        this.name = dto.getName();
+        this.address = dto.getAddress();
+    }
+
     @Builder.Default
-    @OneToMany(mappedBy = "admin")
+    @OneToMany(mappedBy = "building", orphanRemoval = true, cascade = ALL)
     private List<Admin> adminList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "building", orphanRemoval = true, cascade = ALL)
     private List<Member> memberList = new ArrayList<>();
 }

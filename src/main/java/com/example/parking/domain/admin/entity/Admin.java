@@ -1,6 +1,6 @@
-package com.example.parking.domain.admin.domain;
+package com.example.parking.domain.admin.entity;
 
-import com.example.parking.domain.building.Building;
+import com.example.parking.domain.building.entity.Building;
 import com.example.parking.domain.common.BaseEntity;
 import com.example.parking.domain.common.Role;
 import lombok.AllArgsConstructor;
@@ -42,6 +42,7 @@ public class Admin extends BaseEntity {
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "building_Id")
     private Building building;
 
     //==연관관계 편의 메서드==//

@@ -1,6 +1,6 @@
 package com.example.parking.domain.member;
 
-import com.example.parking.domain.building.Building;
+import com.example.parking.domain.building.entity.Building;
 import com.example.parking.domain.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,7 +45,12 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Integer car_number;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean approvalStatus = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "building_id")
     private Building building;
 
     //==연관관계 편의 메서드==//
@@ -55,5 +60,9 @@ public class Member extends BaseEntity {
         }
         this.building = building;
         building.getMemberList().add(this);
+    }
+
+    public void setApprovalStatus() {
+        this.approvalStatus = true;
     }
 }
