@@ -19,11 +19,15 @@ import java.util.UUID;
 @Builder
 public class Admin extends BaseEntity {
 
+//    @Id
+//    @GeneratedValue(generator = "uuid2")
+//    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+//    @Column(columnDefinition = "BINARY(16)")
+//    private UUID adminId;
+
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID adminId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long adminId;
 
     @Column(nullable = false)
     private String name;
@@ -42,7 +46,6 @@ public class Admin extends BaseEntity {
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "building_Id")
     private Building building;
 
     //==연관관계 편의 메서드==//

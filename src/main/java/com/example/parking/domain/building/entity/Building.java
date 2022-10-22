@@ -3,7 +3,8 @@ package com.example.parking.domain.building.entity;
 
 import com.example.parking.domain.admin.entity.Admin;
 import com.example.parking.domain.building.dto.UpdateBuildingInfoRequestDto;
-import com.example.parking.domain.member.Member;
+import com.example.parking.domain.common.Address;
+import com.example.parking.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,20 +26,25 @@ import static javax.persistence.CascadeType.ALL;
 public class Building {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID buildingId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long buildingId;
 
-    @Column(nullable = false, name = "building_name")
+    @Column(nullable = false, name = "buildingName")
     private String name;
 
-    @Column(nullable = false)
-    private String address;
+    @Builder.Default
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "buildingCity")),
+            @AttributeOverride(name = "district", column = @Column(name = "buildingDistrict")),
+            @AttributeOverride(name = "detail", column = @Column(name = "buildingAddressDetail")),
+            @AttributeOverride(name = "zipCode", column = @Column(name = "buildingZipCode"))
+    })
+    private Address buildingAddress = new Address();
 
     public void updateInfo(UpdateBuildingInfoRequestDto dto) {
         this.name = dto.getName();
-        this.address = dto.getAddress();
+        this.buildingAddress = dto.getAddress().toEntity();
     }
 
     @Builder.Default

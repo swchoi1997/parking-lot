@@ -1,4 +1,4 @@
-package com.example.parking.domain.mail;
+package com.example.parking.domain.mail.entity;
 
 import com.example.parking.domain.common.BaseEntity;
 import com.example.parking.domain.common.Role;
@@ -20,10 +20,8 @@ import java.util.UUID;
 public class Mail extends BaseEntity {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID mailId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long mailId;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -32,12 +30,25 @@ public class Mail extends BaseEntity {
     private String emailCheckToken;
 
     @Column(nullable = false)
-    private Boolean EmailVerified;
+    private int limitSendCount;
 
     @Column(nullable = false)
-    private LocalDateTime emailCheckTokenGeneratedAt;
+    private LocalDateTime expireTime;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    private Boolean expireToken;
+
+    public void upLimitSendCount(){
+        limitSendCount += 1;
+    }
+
+    public void setExpireToken(){
+        this.expireToken = true;
+        this.limitSendCount = 0;
+        this.emailCheckToken = null;
+    }
+
+    public void setEmailCheckToken(){
+        String emailToken = UUID.randomUUID().toString();
+        this.emailCheckToken = emailToken.substring(0, 6);
+    }
 }
