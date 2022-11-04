@@ -34,9 +34,8 @@ public class AdminServiceImpl implements AdminService{
     @Transactional
     public AdminJoinResponseDto joinAdmin(final AdminJoinDto adminJoinDto) {
         beforeProcessJoinAdmin(adminJoinDto);
-        Admin admin = Admin.builder().name(adminJoinDto.getName())
-                .phone(adminJoinDto.getPhone()).adminName(adminJoinDto.getAdminName())
-                .password(passwordEncoder.encode(adminJoinDto.getPassword())).role(Role.ADMIN).build();
+        Admin admin = adminJoinDto.toEntity(passwordEncoder.encode(adminJoinDto.getPassword()));
+
         admin.setBuilding(buildingRepository.findById(adminJoinDto.getBuildingId())
                             .orElseThrow(BuildingNotRegisterException::new));
 
@@ -63,7 +62,8 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     @Transactional
-    public MemberApprovalResponseDto memberApprovalByAdmin(final MemberApprovalDto memberApprovalDto) {
+    public MemberApprovalResponseDto memberApprovalByAdmin(final Admin admin, final MemberApprovalDto memberApprovalDto) {
+        checkAdminExists(admin);
         Member member = memberRepository.findById(memberApprovalDto.getMemberId())
                 .orElseThrow(MemberNotFoundException::new);
 
@@ -72,5 +72,11 @@ public class AdminServiceImpl implements AdminService{
         memberRepository.save(member);
 
         return MemberApprovalResponseDto.builder().username(member.getEmail()).name(member.getName()).build();
+    }
+
+    private void checkAdminExists(Admin admin) {
+        if (!adminRepository.existsByAdminName(admin.getAdminName())) {
+            throw new MemberNotFoundException();
+        }
     }
 }

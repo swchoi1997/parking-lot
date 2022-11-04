@@ -2,6 +2,7 @@ package com.example.parking.domain.mail.entity;
 
 import com.example.parking.domain.common.BaseEntity;
 import com.example.parking.domain.common.Role;
+import com.example.parking.global.advice.exception.CanNotSendEmailValidTokenByOverCount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,5 +51,11 @@ public class Mail extends BaseEntity {
     public void setEmailCheckToken(){
         String emailToken = UUID.randomUUID().toString();
         this.emailCheckToken = emailToken.substring(0, 6);
+    }
+
+    public void checkLimitEmailSendCount() {
+        if (this.limitSendCount > 5) {
+            throw new CanNotSendEmailValidTokenByOverCount("인증 가능 횟수를 초과하였습니다. 관리자에게 문의하세요");
+        }
     }
 }

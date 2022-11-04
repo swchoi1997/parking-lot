@@ -1,6 +1,8 @@
 package com.example.parking.domain.admin.controller;
 
 import com.example.parking.domain.admin.dto.CommonAdminResponseDto.MemberApprovalResponseDto;
+import com.example.parking.domain.admin.entity.Admin;
+import com.example.parking.domain.admin.entity.CurrentAdmin;
 import com.example.parking.domain.admin.service.AdminService;
 import com.example.parking.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +35,9 @@ public class AdminApiController {
      * */
 
     @PostMapping("/members-approval")
-    public ResponseEntity<ResultResponse<?>> joinMemberApprove(@RequestBody final MemberApprovalDto memberApprovalDto) {
+    public ResponseEntity<ResultResponse<?>> joinMemberApprove(@CurrentAdmin Admin admin, @RequestBody final MemberApprovalDto memberApprovalDto) {
 
-        MemberApprovalResponseDto memberApprovalByAdmin = adminService.memberApprovalByAdmin(memberApprovalDto);
+        MemberApprovalResponseDto memberApprovalByAdmin = adminService.memberApprovalByAdmin(admin, memberApprovalDto);
         ResultResponse<MemberApprovalResponseDto> resultResponse = ResultResponse.<MemberApprovalResponseDto>builder()
                 .response(memberApprovalByAdmin).status(HttpStatus.OK).build();
 
